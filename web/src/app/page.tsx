@@ -1,9 +1,4 @@
-import Image from 'next/image'
-
-type Note = {
-  subject: string;
-  body: string;
-}
+import type { Note } from '@/gql/graphql';
 
 let formattedNotes: Note[] = [];
 
