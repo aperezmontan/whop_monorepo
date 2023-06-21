@@ -36,13 +36,21 @@ gem "bootsnap", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem "rack-cors"
 
+# A Ruby implementation of GraphQL [https://graphql-ruby.org/]
+gem 'graphql'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+
+  # Library for generating fake data [https://github.com/faker-ruby/faker]
+  gem 'faker' 
 end
 
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
-end
 
+  # Mount the GraphiQL IDE in Ruby on Rails
+  gem 'graphiql-rails'
+end
