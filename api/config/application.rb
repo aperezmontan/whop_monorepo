@@ -1,5 +1,5 @@
 require_relative "boot"
-
+require "sprockets/railtie" # For GraphiQL
 require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
@@ -22,6 +22,14 @@ module Api
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
+
+    # Only want to configure the sessions store for graphiql
+    if Rails.env.development?
+      config.session_store :cookie_store, key: '_interslice_session'
+      config.middleware.use ActionDispatch::Cookies
+      config.middleware.use config.session_store, config.session_options
+    end
+
     config.api_only = true
   end
 end
