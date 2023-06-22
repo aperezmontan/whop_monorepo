@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import type { Note } from '@/gql/graphql';
+import type { Dispatch, SetStateAction } from 'react';
  
-export default function ShowNotes() {
-  let [notes, setNotes] = useState<Note[]>([])
-
+export default function ShowNotes({ notes, setNotes }: { notes: Note[], setNotes: Dispatch<SetStateAction<Note[]>>}) {
   const GET_NOTES = `
     query {
       notes {
@@ -17,8 +16,6 @@ export default function ShowNotes() {
   `
 
   useEffect(() => {
-    console.log("Making request to GRAPHQL")
-
     fetch('http://localhost:3000/graphql', {
       method: 'POST',
       headers: {
@@ -31,12 +28,8 @@ export default function ShowNotes() {
     .then((res) => res.json())
     .catch((error) => console.error(error))
     .then((respJson) => {
-      console.log("respJson", respJson)
-
       if (respJson) {
-        const fetchedNotes = respJson.data.notes;
-        console.log("fetchedNotes", fetchedNotes)
-  
+        const fetchedNotes = respJson.data.notes;  
         setNotes(fetchedNotes.map((note: Note) => note))
       }
     })

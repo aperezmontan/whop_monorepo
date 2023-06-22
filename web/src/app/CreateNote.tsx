@@ -1,5 +1,8 @@
 "use client";
 
+import type { Note } from '@/gql/graphql';
+import type { Dispatch, SetStateAction } from 'react';
+
 interface FormElements extends HTMLFormControlsCollection {
   subject: HTMLInputElement;
   body: HTMLTextAreaElement;
@@ -9,7 +12,7 @@ interface NoteFormElement extends HTMLFormElement {
   readonly elements: FormElements
 }
  
-export default function CreateNote() {  
+export default function CreateNote({ notes, setNotes }: { notes: Note[], setNotes: Dispatch<SetStateAction<Note[]>>}) {
   const createNotePayload = ({ subject, body }: { subject: string, body: string }) => (
     `mutation {
       createNote(input: {
@@ -35,10 +38,6 @@ export default function CreateNote() {
       body: event.currentTarget.elements.body.value,
     }
 
-    console.log("CREATING", createNotePayload(newNote))
-
-    // debugger
-
     fetch('http://localhost:3000/graphql', {
       method: 'POST',
       headers: {
@@ -51,14 +50,10 @@ export default function CreateNote() {
     .then((res) => res.json())
     .catch((error) => console.error(error))
     .then((respJson) => {
-      console.log("respJson", respJson)
-
-      // if (respJson) {
-      //   const fetchedNotes = respJson.data.notes;
-      //   console.log("fetchedNotes", fetchedNotes)
-  
-      //   setNotes(fetchedNotes.map((note: Note) => note))
-      // }
+      if (respJson) {
+        const createdNote = respJson.data.createNote.note;  
+        setNotes([ ...[createdNote], ...notes ])
+      }
     })
   }
 
